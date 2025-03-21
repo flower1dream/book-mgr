@@ -1,4 +1,4 @@
-const getMeta = ()=>{
+function getMeta() {
     return {
         createdAt: {
             type: Number,
@@ -9,7 +9,7 @@ const getMeta = ()=>{
             default: (new Date()).getTime(),
         },
     };
-};
+}
 
 module.exports = {
     getMeta,
