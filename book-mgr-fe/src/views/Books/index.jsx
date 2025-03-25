@@ -1,5 +1,6 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { book } from "@/service";
+import { useRouter } from 'vue-router';
 import { result, formatTimestamp } from "@/helpers/utils";
 import { message, Modal, Input } from 'ant-design-vue';
 import AddOne from './AddOne/index.vue';
@@ -12,6 +13,8 @@ export default defineComponent({
     },
 
     setup() {
+        const router = useRouter();
+
         const columns = [
             {
                 title: '书名',
@@ -172,15 +175,20 @@ export default defineComponent({
             });
         };
 
-
+        // 显示更新弹框
         const update = ({ record }) => {
             showUpdateModal.value = true;
             curEditBook.value = record;
         };
-
+        // 更新某一本书籍的数据
         const updateCurBook = (newData) => {
             Object.assign(curEditBook.value, newData);
-          };
+        };
+        // 进入书籍详情页面
+        const toDetail = ({ record }) => {
+            router.push(`/books/${record._id}`);
+        };
+
 
         return {
             columns,
@@ -200,6 +208,7 @@ export default defineComponent({
             curEditBook,
             update,
             updateCurBook,
+            toDetail,
         };
     },
 });

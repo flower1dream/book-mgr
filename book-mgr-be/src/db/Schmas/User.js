@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { getMeta } = require('../helpers')
+const { getMeta, preSave } = require('../helpers')
 
 const UserSchema = new mongoose.Schema({
     account: String,
@@ -7,5 +7,6 @@ const UserSchema = new mongoose.Schema({
 
     meta: getMeta(),
 });
+UserSchema.pre('save', preSave);
 
 mongoose.model('User', UserSchema);

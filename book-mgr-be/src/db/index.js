@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 require('./Schmas/User');
 require('./Schmas/InviteCode');
 require('./Schmas/Book');
+require('./Schmas/InventoryLog');
 
 const connect = () => {
     return mongoose.connect('mongodb://localhost:27017/book-mgr', {
