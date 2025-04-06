@@ -3,6 +3,10 @@ require('./Schmas/User');
 require('./Schmas/InviteCode');
 require('./Schmas/Book');
 require('./Schmas/InventoryLog');
+require('./Schmas/Character');
+require('./Schmas/Log');
+require('./Schmas/LogResponse')
+require('./Schmas/ForgetPassword')
 
 const connect = () => {
     return mongoose.connect('mongodb://localhost:27017/book-mgr', {

@@ -1,4 +1,7 @@
+import { getToken } from '@/helpers/token';
 import axios from 'axios';
+
+axios.defaults.headers['Authorization'] = `Bearer ${getToken()}`;
 
 export const add = (form) => {
     return axios.post(

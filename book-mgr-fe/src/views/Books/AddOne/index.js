@@ -19,7 +19,8 @@ export default defineComponent({
     },
 
     setup(props, context) {
-        console.log(props);
+        
+        // console.log(props);
 
         // 使用 reactive 创建响应式表单数据，并克隆默认值
         const addForm = reactive(clone(defaultFormData));

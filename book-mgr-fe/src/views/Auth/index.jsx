@@ -1,16 +1,19 @@
 import { defineComponent, reactive } from "vue";
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons-vue'
-import { auth } from '@/service';
+import { auth, resetPassword } from '@/service';
 import { result } from '@//helpers/utils';
-
-import { message } from 'ant-design-vue';
+import { getCharacterInfoById } from '@/helpers/character';
+import { message, Modal, Input } from 'ant-design-vue';
+import store from '@/store';
+import { useRouter } from 'vue-router';
+import { setToken } from "@/helpers/token";
 
 export default defineComponent({
     components: {
         UserOutlined, LockOutlined, MailOutlined,
     },
     setup() {
-
+        const router = useRouter();
         //注册相关的表单数据
         //reactive声明响应式的数据
         const regForm = reactive({
@@ -19,8 +22,31 @@ export default defineComponent({
             inviteCode: '',
         });
 
+        const forgetPassword = () => {
+            Modal.confirm({
+                title: `输入账号发起申请，管理员会审核`,
+                content: (
+                    <div>
+                        <Input class="_forget_password_account" />
+                    </div>
+                ),
+                onOk: async () => {
+                    const el = document.querySelector('._forget_password_account');
+                    let account = el.value;
+
+                    const res = await resetPassword.add(account);
+
+                    result(res)
+                        .success(({ msg }) => {
+                            message.success(msg);
+                        });
+                },
+            });
+        };
+
+
         //注册逻辑
-        const register = async() => {
+        const register = async () => {
             if (regForm.account === '') {
                 message.info('请输入账户');
                 return;
@@ -41,9 +67,9 @@ export default defineComponent({
                 regForm.password,
                 regForm.inviteCode,
             );
-            
+
             result(res)
-                .success((data)=>{
+                .success((data) => {
                     message.success(data.msg);
                 })
         };
@@ -54,7 +80,7 @@ export default defineComponent({
         })
 
         //登录的逻辑
-        const login = async() => {
+        const login = async () => {
 
             if (loginForm.account === '') {
                 message.info('请输入账户');
@@ -68,9 +94,17 @@ export default defineComponent({
             const res = await auth.login(loginForm.account, loginForm.password)
 
             result(res)
-            .success((data)=>{
-                message.success(data.msg);
-            })
+                .success(({ msg, data: { user, token } }) => {
+                    message.success(msg);
+
+                    store.commit('setUserInfo', user);
+                    store.commit('setUserCharacter', getCharacterInfoById(user.character));
+
+                    setToken(token);
+
+                    router.replace('/books');
+                    // console.log(store.state);
+                })
 
         };
 
@@ -78,7 +112,7 @@ export default defineComponent({
             //注册相关的数据
             regForm,
             register,
-
+            forgetPassword,
             //登入相关的数据
             login,
             loginForm,

@@ -3,6 +3,9 @@ const inviteCode = require('./invite-code');
 const book = require('./book');
 const InventoryLog = require('./inventory-log');
 const user = require('./user');
+const character = require('./character');
+const log = require('./log');
+const forgetPassword = require('./forget-password');
 
 const registerRoutes = (app) => {
     app.use(authRouter.routes());
@@ -10,6 +13,9 @@ const registerRoutes = (app) => {
     app.use(book.routes());
     app.use(InventoryLog.routes());
     app.use(user.routes());
+    app.use(character.routes());
+    app.use(log.routes());
+    app.use(forgetPassword.routes());
 };
 
 module.exports = registerRoutes;

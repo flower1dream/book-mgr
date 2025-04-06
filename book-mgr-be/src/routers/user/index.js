@@ -2,9 +2,11 @@ const Router = require('@koa/router');
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const config = require('../../project.config');
+const { verify, getToken } = require('../../helpers/token');
 
 // const { getBody } = require('../helpers/utils');
 const User = mongoose.model('User');
+const Character = mongoose.model('Character');
 
 const router = new Router({
     prefix: '/user',
@@ -69,11 +71,26 @@ router.post('/add', async (ctx) => {
     const {
         account,
         password,
+        character,
     } = ctx.request.body;
+
+    const char = await Character.findOne({
+        _id: character,
+    })
+
+    if (!char) {
+        ctx.body = {
+            msg: '出错啦',
+            code: 0,
+        };
+
+        return;
+    };
 
     const user = new User({
         account,
         password: password || config.DEFAULT_PASSWORD,
+        character,
     });
 
     const res = await user.save()
@@ -112,6 +129,55 @@ router.post('/reset/password', async (ctx) => {
             _id: res._id,
         },
         code: 1,
+    };
+});
+
+router.post('/update/character', async (ctx) => {
+    const {
+        character,
+        userId,
+    } = ctx.request.body;
+
+    const char = await Character.findOne({
+        _id: character,
+    });
+
+    if (!char) {
+        ctx.body = {
+            msg: '出错啦',
+            code: 0,
+        };
+        return;
+    }
+
+    const user = await User.findOne({ _id: userId, });
+
+    if (!user) {
+        ctx.body = {
+            msg: '出错啦',
+            code: 0,
+        };
+        return;
+    }
+
+    user.character = character;
+
+    const res = await user.save();
+
+    ctx.body = {
+        data: res,
+        code: 1,
+        msg: '修改成功',
+    };
+});
+
+router.get('/info', async (ctx) => {
+    // Authorization: Bearer $%^7865fdgshgfdh 是一个示例令牌（token）的片段，
+    // 通常在请求头中以 Authorization: Bearer <token> 的形式发送
+    ctx.body = {
+        data: await verify(getToken(ctx)),
+        code: 1,
+        msg: '获取成功',
     };
 });
 
