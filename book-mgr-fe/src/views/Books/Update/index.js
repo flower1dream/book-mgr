@@ -3,6 +3,7 @@ import { book } from '@/service';
 import { result, clone } from '@/helpers/utils';
 import { message } from 'ant-design-vue';
 import moment from 'moment';
+import store from '@/store';  // 注意去掉了花括号 
 
 
 export default defineComponent({
@@ -52,6 +53,7 @@ export default defineComponent({
             props,
             close,
             editForm,
+            store: store.state,
         };
     },
 });

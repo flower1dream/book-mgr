@@ -1,8 +1,9 @@
 import { defineComponent, ref, onMounted } from "vue";
-import { book } from "@/service";
+import { book, bookClassify } from "@/service";
 import { useRouter } from 'vue-router';
 import { result, formatTimestamp } from "@/helpers/utils";
 import { message, Modal, Input } from 'ant-design-vue';
+import { getClassifyTitleById } from "@/helpers/book-classify";
 import AddOne from './AddOne/index.vue';
 import Update from './Update/index.vue';
 
@@ -43,7 +44,9 @@ export default defineComponent({
             },
             {
                 title: '分类',
-                dataIndex: 'classify',
+                slots: {
+                    customRender: 'classify',
+                },
             },
             {
                 title: '操作',
@@ -209,6 +212,8 @@ export default defineComponent({
             update,
             updateCurBook,
             toDetail,
+            getList,
+            getClassifyTitleById,
         };
     },
 });

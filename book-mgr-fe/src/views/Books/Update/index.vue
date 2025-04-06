@@ -26,7 +26,18 @@
                     <a-date-picker v-model:value='editForm.publishDate' />
                 </a-form-item>
                 <a-form-item label="分类">
-                    <a-input v-model:value='editForm.classify' />
+                    <a-select
+                        v-model:value="editForm.classify"
+                        style="width: 120px"
+                    >
+                    <a-select-option
+                        v-for="item in store.bookClassify"
+                        :key="item._id"
+                        :value="item._id"
+                    >
+                        {{ item.title }}
+                    </a-select-option>
+                    </a-select>
                 </a-form-item>
             </a-form>
         </a-modal>

@@ -2,6 +2,7 @@ import { defineComponent, reactive } from 'vue';
 import { book } from '@/service';
 import { result, clone } from '@/helpers/utils';
 import { message } from 'ant-design-vue';
+import store from '@/store';  // 注意去掉了花括号 
 
 // 默认表单数据
 const defaultFormData = {
@@ -19,11 +20,15 @@ export default defineComponent({
     },
 
     setup(props, context) {
-        
+
         // console.log(props);
 
         // 使用 reactive 创建响应式表单数据，并克隆默认值
         const addForm = reactive(clone(defaultFormData));
+
+        if (store.state.bookClassify.length) {
+            addForm.classify = store.state.bookClassify[0]._id;
+        }
 
         // 提交表单
         const submit = async () => {
@@ -35,6 +40,8 @@ export default defineComponent({
                 .success((d, { data }) => {
                     Object.assign(addForm, defaultFormData); // 重置表单
                     message.success(data.msg); // 显示成功消息
+
+                    context.emit('getList');
                 })
                 .fail((err) => {
                     console.error('提交失败:', err);
@@ -52,6 +59,7 @@ export default defineComponent({
             submit,
             props,
             close,
+            store: store.state,
         };
     },
 });

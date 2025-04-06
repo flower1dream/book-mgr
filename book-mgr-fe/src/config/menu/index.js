@@ -19,6 +19,11 @@ export default [
         onlyAdmin: false,
         children: [
             {
+                title: '书籍分类管理',
+                url: '/book-classify',
+                onlyAdmin: true,
+            },
+            {
                 title: '重置密码列表',
                 url: '/reset/password',
                 onlyAdmin: true,

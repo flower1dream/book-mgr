@@ -7,6 +7,7 @@ require('./Schmas/Character');
 require('./Schmas/Log');
 require('./Schmas/LogResponse')
 require('./Schmas/ForgetPassword')
+require('./Schmas/BookClassify')
 
 const connect = () => {
     return mongoose.connect('mongodb://localhost:27017/book-mgr', {

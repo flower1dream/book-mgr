@@ -15,7 +15,7 @@
           <a v-if="isSearch" href="javascript:;" @click="backAll" >返回</a>
         </div>
 
-        <a-button @click="show = true">添加一条</a-button>
+        <a-button @click="show = true" v-only-admin>添加一条</a-button>
       </space-between>
 
       <a-divider />
@@ -28,6 +28,10 @@
       >
         <template #publishDate="data">
           {{ formatTimestamp(data.record.publishDate)  }}
+        </template>
+
+        <template #classify="{ record }">
+          {{ getClassifyTitleById(record.classify) }}
         </template>
 
         <template #count="data">
@@ -61,7 +65,11 @@
 
     </a-card>
 
-    <add-one v-model:show="show" />
+    <add-one
+      v-model:show="show"
+      :classifyList="bookClassifyList"
+      @getList="getList"
+    />
 
 
     <update 
