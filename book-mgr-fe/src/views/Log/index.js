@@ -5,7 +5,11 @@ import { getLogInfoByPath } from '@/helpers/log';
 import { message } from 'ant-design-vue';
 
 export default defineComponent({
-  setup() {
+  props: {
+    simple: Boolean,
+  },
+
+  setup(props) {
     const curPage = ref(1);
     const pageSize = ref(20); // 新增
     const total = ref(0);
@@ -28,14 +32,17 @@ export default defineComponent({
           customRender: 'createdAt',
         },
       },
-      {
+    ];
+
+    if (!props.simple) {
+      columns.push({
         title: '操作',
         slots: {
           customRender: 'action',
         },
       },
-    ];
-
+      )
+    };
 
     const getList = async () => {
       loading.value = true;
@@ -82,6 +89,7 @@ export default defineComponent({
       loading,
       formatTimestamp,
       remove,
+      simple: props.simple,
     };
   },
 });
