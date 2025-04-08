@@ -9,6 +9,7 @@ const forgetPassword = require('./forget-password');
 const bookClassify = require('./book-classify');
 const profile = require('./profile');
 const dashboard = require('./dashboard');
+const upload = require('./upload');
 
 const registerRoutes = (app) => {
     app.use(authRouter.routes());
@@ -22,6 +23,7 @@ const registerRoutes = (app) => {
     app.use(bookClassify.routes());
     app.use(profile.routes());
     app.use(dashboard.routes());
+    app.use(upload.routes());
 };
 
 module.exports = registerRoutes;

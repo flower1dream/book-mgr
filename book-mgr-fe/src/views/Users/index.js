@@ -118,6 +118,36 @@ export default defineComponent({
                 });
         };
 
+        const onUploadChange = ({ file }) => {
+            if (file.response) {
+                // 提取上传文件的文件名
+                const key = file.response.data;
+                // console.log('key的内容：', key);
+
+                // 发送正确格式的请求
+                user.addMany(key)
+                    .then(res => {
+                        // console.log('添加用户响应：', res);
+
+                        // 解构响应数据
+                        const { code, msg, data } = res.data;
+
+                        if (code === 1) {
+                            message.success(`成功添加 ${data.addCount} 位用户`);
+                            getUser(); // 刷新用户列表
+                        } else {
+                            message.error(msg || '用户添加失败');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('调用 addMany 接口出错：', err);
+                        message.error('请求失败，请检查网络或服务器状态');
+                    });
+            }
+        };
+
+
+
         return {
             list,
             total,
@@ -139,7 +169,7 @@ export default defineComponent({
             showEditCharacterModal,
             editForm,
             characterInfo: store.state.characterInfo,
-
+            onUploadChange,
         };
     },
 });

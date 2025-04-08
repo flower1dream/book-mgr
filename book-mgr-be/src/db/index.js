@@ -10,10 +10,12 @@ require('./Schmas/ForgetPassword')
 require('./Schmas/BookClassify')
 
 const connect = () => {
-    return mongoose.connect('mongodb://localhost:27017/book-mgr', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
+    return mongoose.connect('mongodb://localhost:27017/book-mgr'
+    //     , {
+    //     useNewUrlParser: true,
+    //     useUnifiedTopology: true,
+    // }
+)
         .then(() => {
             console.log('MongoDB 连接成功');
         })

@@ -48,3 +48,10 @@ export const detail = (id) => {
         `http://localhost:3000/book/detail/${id}`,
     );
 };
+
+export const addMany = (key) => {
+    return axios.post('http://localhost:3000/book/addMany', {
+      key, // 注意这里直接用 key，而不是 Key，注意大小写！！！
+    });
+  };
+  

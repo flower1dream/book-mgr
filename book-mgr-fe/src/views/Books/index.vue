@@ -18,7 +18,17 @@
                 <a v-if="isSearch" href="javascript:;" @click="backAll" >返回</a>
               </div>
 
+            <div>
               <a-button @click="show = true" v-only-admin>添加一条</a-button>
+              &nbsp;
+              <a-upload
+                @change="onUploadChange"
+                  action="http://localhost:3000/upload/file"
+                >
+                <a-button type="primary">上传 Excel 添加</a-button>
+              </a-upload>
+            </div>
+
             </space-between>
           <a-divider />
       </div>

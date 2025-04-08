@@ -1,6 +1,8 @@
 const Router = require('@koa/router');
 const mongoose = require('mongoose');
 const { getBody } = require("../../helpers/utils");
+const { loadExcel, getFirstSheet } = require('../../helpers/excel')
+const config = require('../../project.config');
 
 
 const BOOK_CONST = {
@@ -10,6 +12,7 @@ const BOOK_CONST = {
 
 const Book = mongoose.model('Book');
 const InventoryLog = mongoose.model('InventoryLog');
+const BookClassify = mongoose.model('BookClassify');
 
 const findBookOne = async (id) => {
     const one = await Book.findOne({
@@ -243,6 +246,55 @@ router.get('/detail/:id', async (ctx) => {
         data: one,
         code: 1,
     }
+});
+
+router.post('/addMany', async (ctx) => {
+    const {
+        key = '',
+    } = ctx.request.body;
+
+    const path = `${config.UPLOAD_DIR}/${key}`;
+
+    const excel = loadExcel(path);
+    const sheet = getFirstSheet(excel);
+
+    if (sheet.length === 0) {
+        ctx.body = { code: 0, msg: 'Excel文件为空，未添加任何书本' };
+        return;
+    }
+
+    const arr = [];
+    for (let i = 0; i < sheet.length; i++) {
+        let record = sheet[i];
+
+        const [name, price, author, publishDate, classify, count] = record;
+
+        const one = await BookClassify.findOne({ title: classify });
+
+        if (!one) {
+            ctx.body = { code: 0, msg: `分类"${classify}"不存在，请检查分类表` };
+            return;
+        }
+
+        arr.push({
+            name,
+            price,
+            author,
+            publishDate,
+            classify: one._id, // 存储分类的 `_id`
+            count,
+        });
+    }
+
+    const insertedBooks = await Book.insertMany(arr);
+
+    ctx.body = {
+        code: 1,
+        msg: '添加成功',
+        data: {
+            addCount: insertedBooks.length,
+        },
+    };
 });
 
 module.exports = router;
