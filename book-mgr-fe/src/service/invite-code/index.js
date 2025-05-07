@@ -1,20 +1,22 @@
-import axios from 'axios';
+import {
+    del,
+    post,
+    get
+} from '@/helpers/request';
 
 export const list = (page, size) => {
-    return axios.get('http://localhost:3000/invite/list', {
-        params: {
-            page,
-            size,
-        },
+    return get('/invite/list', {
+        page,
+        size,
     });
 };
 
 export const add = (count) => {
-    return axios.post('http://localhost:3000/invite/add', {
+    return post('/invite/add', {
         count,
     });
 };
 
 export const remove = (id) => {
-    return axios.delete(`http://localhost:3000/invite/${id}`);
+    return del(`/invite/${id}`);
 };

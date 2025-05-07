@@ -3,7 +3,7 @@ const { connect } = require('./db');
 const registerRoutes = require('./routers');
 const cors = require('@koa/cors');
 const { koaBody } = require('koa-body')
-const { middleware: koaJwtMiddleware, catchTokenError } = require('./helpers/token');
+const { middleware: koaJwtMiddleware, checkUser, catchTokenError } = require('./helpers/token');
 const { logMiddleware } = require('./helpers/log');
 
 const app = new Koa();
@@ -19,9 +19,11 @@ connect().then(() => {
 
     app.use(catchTokenError);
 
-    // koaJwtMiddleware(app);
+    koaJwtMiddleware(app);
 
-    // app.use(logMiddleware);
+    app.use(checkUser);
+
+    app.use(logMiddleware);
 
     registerRoutes(app);
 

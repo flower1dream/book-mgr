@@ -1,7 +1,9 @@
-import axios from 'axios';
+import {
+    post,
+} from '@/helpers/request';
 
 export const resetPassword = (password, oldPassword) => {
-    return axios.post('http://localhost:3000/profile/update/password', {
+    return post('/profile/update/password', {
         password,
         oldPassword,
     });

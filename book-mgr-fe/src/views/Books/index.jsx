@@ -6,6 +6,7 @@ import { message, Modal, Input } from 'ant-design-vue';
 import { getClassifyTitleById } from "@/helpers/book-classify";
 import AddOne from './AddOne/index.vue';
 import Update from './Update/index.vue';
+import { getHeaders } from "@/helpers/request";
 
 export default defineComponent({
     components: {
@@ -246,6 +247,7 @@ export default defineComponent({
             getClassifyTitleById,
             simple: props.simple,
             onUploadChange,
+            headers: getHeaders(),
         };
     },
 });

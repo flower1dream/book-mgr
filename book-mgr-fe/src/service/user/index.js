@@ -1,24 +1,26 @@
-import axios from 'axios';
+import {
+    del,
+    post,
+    get
+} from '@/helpers/request';
 
 export const list = (page = 1, size = 20, keyword = '') => {
-    return axios.get(
-        'http://localhost:3000/user/list',
+    return get(
+        '/user/list',
         {
-            params: {
-                page,
-                size,
-                keyword,
-            },
+            page,
+            size,
+            keyword,
         }
     );
 };
 
 export const remove = (id) => {
-    return axios.delete(`http://localhost:3000/user/${id}`);
+    return del(`/user/${id}`);
 };
 
 export const add = (account, password, character) => {
-    return axios.post('http://localhost:3000/user/add', {
+    return post('/user/add', {
         account,
         password,
         character,
@@ -26,26 +28,25 @@ export const add = (account, password, character) => {
 };
 
 export const resetPassword = (id) => {
-    return axios.post('http://localhost:3000/user/reset/password', {
+    return post('/user/reset/password', {
         id,
     });
 };
 
 export const editCharacter = (characterId, userId) => {
-    return axios.post('http://localhost:3000/user/update/character', {
+    return post('/user/update/character', {
         character: characterId,
         userId: userId,
     });
 };
 
 export const info = () => {
-    return axios.get('http://localhost:3000/user/info');
+    return get('/user/info');
 };
 
 
-  export const addMany = (key) => {
-    return axios.post('http://localhost:3000/user/addMany', {
-      key, // 注意这里直接用 key，而不是 Key，注意大小写！！！
+export const addMany = (key) => {
+    return post('/user/addMany', {
+        key, // 注意这里直接用 key，而不是 Key，注意大小写！！！
     });
-  };
-  
+};

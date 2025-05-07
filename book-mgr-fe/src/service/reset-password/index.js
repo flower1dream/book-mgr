@@ -1,22 +1,23 @@
-import axios from 'axios';
+import {
+    post,
+    get
+} from '@/helpers/request';
 
 export const list = (page, size) => {
-    return axios.get('http://localhost:3000/forget-password/list', {
-        params: {
-            page,
-            size,
-        }
+    return get('/forget-password/list', {
+        page,
+        size,
     });
 };
 
 export const add = (account) => {
-    return axios.post('http://localhost:3000/forget-password/add', {
-            account,
+    return post('/forget-password/add', {
+        account,
     });
 };
 
 export const updateStatus = (id, status) => {
-    return axios.post('http://localhost:3000/forget-password/update/status', {
+    return post('/forget-password/update/status', {
         id,
         status,
     });

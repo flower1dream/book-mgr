@@ -6,6 +6,7 @@ import { result, formatTimestamp } from '@/helpers/utils';
 import AddOne from './AddOne/index.vue';
 import store from '@/store';
 import { getCharacterInfoById } from '@/helpers/character';
+import { getHeaders } from '@/helpers/request';
 
 const columns = [
     {
@@ -170,6 +171,7 @@ export default defineComponent({
             editForm,
             characterInfo: store.state.characterInfo,
             onUploadChange,
+            headers: getHeaders(),
         };
     },
 });

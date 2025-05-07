@@ -8,7 +8,7 @@
 
         <div class="right">
             <div class="hello-msg">你好，xx</div>
-            <div class="logout">退出</div>
+            <div class="logout" @click="logout">退出</div>
         </div>
     </div>
 

@@ -1,21 +1,25 @@
-import axios from 'axios';  // 15.7K (gzipped: 5.4K)
+import {
+    del,
+    post,
+    get
+  } from '@/helpers/request';
 
 export const add = (title) => {
-    return axios.post('http://localhost:3000/book-classify/add', {
+    return post('/book-classify/add', {
         title,
     });
 }
 
 export const list = () => {
-    return axios.get('http://localhost:3000/book-classify/list');
+    return get('/book-classify/list');
 };
 
 export const remove = (id) => {
-    return axios.delete(`http://localhost:3000/book-classify/${id}`);
+    return del(`/book-classify/${id}`);
 };
 
 export const updateTitle = (id, title) => {
-    return axios.post('http://localhost:3000/book-classify/update/title',
+    return post('/book-classify/update/title',
         {
             id,
             title,
