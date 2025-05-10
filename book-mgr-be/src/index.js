@@ -1,32 +1,36 @@
-const Koa = require('koa'); // 注意：应该是 Koa 而不是 Koa
+const Koa = require('koa');
+const { connect } = require('./db');
+const registerRoutes = require('./routers');
+const cors = require('@koa/cors');
+const { koaBody } = require('koa-body')
+const { middleware: koaJwtMiddleware, checkUser, catchTokenError } = require('./helpers/token');
+const { logMiddleware } = require('./helpers/log');
+
 const app = new Koa();
 
-// 通过 app.use 注册中间件
-// 中间件本质上就是一个函数
-// context 上下文 — 当前请求的相关信息都在里面
-app.use((context) => {
-    // 对象的解构
-    const { request: req } = context;
-    const { url } = req;
+connect().then(() => {
+    app.use(cors());
+    app.use(koaBody({
+        multipart: true,  // 启用文件上传
+        formidable: {
+            maxFileSize: 200 * 1024 * 1024, // 限制200MB
+        }
+    }));
 
-    if (url === '/user') {
-        context.body = '<h1>哈哈哈<h1>';
-        return;
-    }
+    app.use(catchTokenError);
 
-    context.body = '??';
-});
+    koaJwtMiddleware(app);
 
-// 添加一个简单的路由
-app.use(async (ctx, next) => {
-    if (ctx.url === '/hello') {
-        ctx.body = 'Hello, World!';
-    } else {
-        await next(); // 调用下一个中间件
-    }
-});
+    app.use(checkUser);
 
-// 启动服务器
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+    app.use(logMiddleware);
+
+    registerRoutes(app);
+
+    // 开启一个 http 服务
+    app.listen(3000, () => {
+        console.log('启动成功');
+    });
+}).catch((err) => {
+    console.error('启动失败', err);
 });
